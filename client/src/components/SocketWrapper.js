@@ -18,8 +18,8 @@ function addPropsToChildren(children, props) {
     return children.map(childElement => addPropsToReactElement(childElement, props));
 }
 
-// Backend URL https://dobby-new.onrender.com http://localhost:5000
-const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL || "https://dobby-new.onrender.com";
+const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL ||
+    (process.env.NODE_ENV === "development" ? "http://localhost:5000" : window.location.origin);
 
 // Singleton socket instance
 let socket;

@@ -1,119 +1,42 @@
-# Dobby – Real-Time Collaborative IDE
+# Dobby
 
-*Live Application:* [https://dobby-new.vercel.app/](https://dobby-new.vercel.app/)  
-*Project Documentation:* [Google Docs Link](https://docs.google.com/document/d/1i0gqZf_wMQr0m5AZWRu0wSYdHcsG_OsXKVjlNJwv6mo/edit?tab=t.0#heading=h.x0am6lnit9xt)
+Dobby is a collaborative code editor. Open a room in two desktop browser windows to edit code together, switch languages, chat, or draw on a shared whiteboard. The video room uses WebRTC for audio and video.
 
----
+## Run locally
 
-## Overview
+Install Node.js and npm, then clone this repository.
 
-*Dobby* is a real-time collaborative coding environment that enables multiple users to join a shared room, write and edit code simultaneously, chat, and even collaborate via video conferencing. The platform is designed to replicate the experience of a shared online IDE while maintaining low latency and seamless synchronization between users.
+```sh
+git clone https://github.com/harshhoneybee/Dobby.git
+cd Dobby
+```
 
-It serves as a robust demonstration of how WebSockets, peer-to-peer connections, and frontend state management can be combined to create an interactive, distributed system for developers.
+Open two terminals in the `Dobby` directory. In the first, start the Socket.IO server.
 
----
+```sh
+npm ci --prefix server
+npm start --prefix server
+```
 
-## How It Works
+In the second, start the React client.
 
-The project is divided into two main modules:
+```sh
+npm ci --prefix client
+npm start --prefix client
+```
 
-### 1. Frontend (/client)
-- Built using *React.js* with *Chakra UI* for a clean and responsive interface.
-- Uses *React Router DOM* for navigation between routes such as:
-  - / – Landing page  
-  - /join-room – Join an existing collaboration session  
-  - /room/:roomId – Real-time collaborative IDE  
-  - /room/getit/:roomId – Video conferencing and shared view
-- *Socket.io-client* manages real-time communication with the backend.
-- Includes conditional rendering for mobile users with a restricted access page.
-- Handles live updates for code, language changes, messages, and user joins/leaves.
-- Frontend is deployed on *Vercel* for optimal performance and scalability.
+Open [localhost:3000](http://localhost:3000) on a desktop browser. Create a room, then join the same room ID in a second window with another username. Code edits should appear in both windows. The server listens on port 5000.
 
-### 2. Backend (server.js)
-- Built with *Node.js, **Express, and **Socket.io* for handling bidirectional communication.
-- The server:
-  - Manages room creation and user mapping.
-  - Synchronizes code changes, programming language selection, and chat messages.
-  - Handles video conferencing through WebRTC-based signaling events.
-  - Broadcasts real-time updates for user joins, disconnects, and shared canvas changes.
-- Uses *UUID* for uniquely identifying messages and rooms.
-- Configured with *CORS* to allow secure cross-origin communication with the frontend.
+## Configure your own deployment
 
-### 3. Real-Time Collaboration Flow
-1. A user creates or joins a room via a unique room ID.
-2. The server maintains user-to-room mappings and broadcasts new participant information.
-3. Each client listens for updates such as:
-   - Code edits
-   - Language changes
-   - Chat messages
-   - Canvas image updates
-4. WebRTC handles peer-to-peer video/audio connection between users.
-5. When a user leaves, the system updates all connected clients and cleans up memory.
+| Setting | Where to set it | Purpose |
+| --- | --- | --- |
+| `REACT_APP_WEB_SOCKET_URL` | Client environment, before starting or building | URL of your Socket.IO server. Development defaults to `http://localhost:5000`. Production defaults to the page’s origin. |
+| `CLIENT_ORIGIN` | Server environment, before starting | Exact frontend origin allowed for cross-origin Socket.IO requests. Defaults to `http://localhost:3000`. |
+| `PORT` | Server environment | HTTP and Socket.IO port. Defaults to `5000`. |
 
----
+The React client is in [client/](client/) and the Express and Socket.IO server is in [server/](server/). To host them separately, build the client with `npm run build --prefix client`, publish `client/build`, and point the two settings above at your deployed URLs.
 
-## Features
+## Project history
 
-- *Live Code Synchronization:* Real-time updates between all connected users.
-- *Integrated Video Conferencing:* Peer-to-peer video and audio collaboration.
-- *Multi-User Chat:* Instant message broadcasting using Socket.io.
-- *Code Language Sync:* Consistent programming environment across all participants.
-- *Canvas Sharing:* Real-time whiteboard/canvas collaboration.
-- *Room Management:* Join or create unique rooms via room IDs.
-- *Cross-Browser Compatibility:* Fully functional on desktop browsers.
-- *Mobile Restriction Handling:* Prevents unsupported devices from accessing room sessions.
-
----
-
-## Tech Stack
-
-| Layer | Technologies Used |
-|-------|--------------------|
-| *Frontend* | React.js, Chakra UI, React Router DOM, Socket.io-client, react-device-detect |
-| *Backend* | Node.js, Express.js, Socket.io, UUID |
-| *Deployment* | Vercel (Frontend), Render / Railway / Localhost (Backend) |
-| *Real-Time Communication* | WebSockets (Socket.io) + WebRTC |
-
----
-
-## Local Development Setup
-
-### Prerequisites
-- Node.js (v18+ recommended)
-- npm or yarn
-
-### Steps
-
-1. *Clone the Repository*
-   bash
-   git clone https://github.com/Prayas248/Dobby_New.git
-   cd Dobby_New
-
-2. **Install Dependencies**
-   bash
-   # for backend
-   cd server
-   npm install
-   
-   # For client
-   cd client
-   npm install
-
-3. *Run the app*
-   bash
-   cd server
-   node server.js
-
-   #For client
-   cd client
-   npm start
-   
-3. **Access the app**
-   bash
-   Client:  http://localhost:3000
-   Backend:  http://localhost:5000
-
-### Docker Setup
- ```bash
-   docker build -t dobby-new .
-   docker run -p 5000:5000 dobby-new
+This repository is based on [Prayas248/Dobby_New](https://github.com/Prayas248/Dobby_New). The [import commit](https://github.com/harshhoneybee/Dobby/commit/b50b11ee9be411366f85686cccd1146b9b2cd307) records the original version.

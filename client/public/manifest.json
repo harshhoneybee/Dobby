@@ -1,6 +1,6 @@
 {
-  "name": "Collab-Code-Editor",
-  "short_name": "Collab-Code-Editor",
+  "name": "Dobby Collaborative Code Editor",
+  "short_name": "Dobby",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
